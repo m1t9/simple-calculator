@@ -44,7 +44,7 @@ class Calculator {
 	getSqrt() {
 		if (this.currentOperand === '') return;
 		this.flag = true;
-		this.currentOperand = (this.currentOperand >= 0) ? Math.sqrt(parseFloat(this.currentOperand).toFixed(12)) : this.currentOperand = 'error';
+		this.currentOperand = (this.currentOperand >= 0) ? Math.sqrt(parseFloat(this.currentOperand)) : this.currentOperand = 'error';
 	}
 
 	compute() {
@@ -72,7 +72,7 @@ class Calculator {
 				return
 		}
 		if (computation !== 'error') {
-			this.currentOperand = (computation % parseInt(computation) === 0) ? computation : parseFloat(computation.toFixed(12));
+			this.currentOperand = parseFloat(computation);
 		} else {
 			this.currentOperand = 'error';
 		}
@@ -115,12 +115,12 @@ class Calculator {
 
 		if (decimalDigits != null) {
 			if ((integerDigits.toString().length + decimalDigits.toString().length) > this.windowSize - 2) {
-				this.currentOperand = parseFloat(parseFloat(this.currentOperand).toFixed(
+				integerDisplay = parseFloat(parseFloat(number).toFixed(
 						(this.windowSize  - integerDigits.toString().length - 
 								((zeroFlag === true) ? 1 : 0)
 							) 
 					));
-				return this.currentOperand;
+				return integerDisplay;
 			}
 			if (zeroFlag === true) {
 				zeroFlag = false;
@@ -143,38 +143,12 @@ class Calculator {
 	    }
 	}
 
-	getCurrentNumber() {
-		return this.getDisplayNumber(this.currentOperand);
-	}
-
 	changeSign() {
 		if (this.previousOperand !== '' && this.currentOperand === '') {
 			this.previousOperand = -1 * this.previousOperand;
 		}
 		if (this.currentOperand !== '') this.currentOperand = -1 * this.currentOperand;
 	}
-
-	isInt(num) {
-		return num % parseInt(num) === 0;
-	}
-
-	cutNumber(num, maxVal) {
-		if (num === '') return;
-		if (this.isInt(num)) {
-			if (num.toString().length > maxVal) return parseFloat(num).toExponential(maxVal);
-		} else {
-			let strNum = num.toString().replace(/0*$/,"");
-			let a = strNum.split('.')[0];
-			let b = strNum.split('.')[1];
-			if (a.length <= (maxVal - 2) ) {
-				return parseFloat(num.toFixed(maxVal - a.length - 1));
-			} else {
-				return parseFloat(num).toExponential(maxVal);
-			}
-		}
-		return num;
-	}
-
 }
 
 const numberButtons = document.querySelectorAll('[data-number]');
